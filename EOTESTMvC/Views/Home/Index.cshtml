@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    bool isAuth =(string) ViewData["isAuth"] == "true" ? true : false;
+    string action = isAuth ? "Load" : "InitiateAuth";
+    string massege = isAuth ? "Load Account" : "Authorize Account";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome To Your Account</h1>
+</div>
+<div class="row">
+    <div class="col-2 offset-5 text-center"> <a class="btn btn-primary" asp-action="@action">@massege</a></div>
+</div>
+
