@@ -66,6 +66,9 @@ namespace EOTESTMvC.Models
             if (tokens.RefreshToken_exp > DateTime.Now) return true;
             return false;
         }
-
+        public static void DeleteAuth()
+        {
+            File.Delete(GetOrCreataRoute());
+        }
     }
 }

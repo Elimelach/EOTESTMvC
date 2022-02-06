@@ -4,45 +4,37 @@ using Intuit.Ipp.Data;
 using Intuit.Ipp.OAuth2PlatformClient;
 using Intuit.Ipp.QueryFilter;
 using Intuit.Ipp.Security;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EOTESTMvC.Controllers
 {
-    //[Authorize]
+   
     public class HomeController : Controller
     {
-        //public static string clientid = ConfigurationManager.AppSettings["clientid"];
-        //public static string clientsecret = ConfigurationManager.AppSettings["clientsecret"];
-        //public static string redirectUrl = ConfigurationManager.AppSettings["redirectUrl"];
-        //public static string environment = ConfigurationManager.AppSettings["appEnvironment"];
+       
 
-        public HomeController(EoContext eoContext)
+        public HomeController(IIntuitFunc intuitFunc)
         {
-            Context = eoContext;
+            Auth2Client = intuitFunc.Auth2Client;
         }
-        public static OAuth2Client auth2Client = new OAuth2Client(
-            "ABi5RL5Esr0HttVY1ZNQx0Ef5Jdfs1iYzizuIBhiCCOJuA0YVZ",
-            "9rBPj6745Ekh0drSxg9YXsl28XBmFw6541fHjL4z",
-            "https://localhost:5001/callback",
-            "sandbox");
-
-        public EoContext Context { get; }
+        
+        public OAuth2Client Auth2Client { get; }
 
         public IActionResult Index()
         {
             ViewBag.isAuth = IOMethods.IsValid100Token().ToString();
             return View();
+        }
+        public IActionResult CancelAuth()
+        {
+            IOMethods.DeleteAuth();
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> Load()
         {
@@ -64,7 +56,7 @@ namespace EOTESTMvC.Controllers
             {
                 OidcScopes.Accounting
             };
-            string authorizeUrl = auth2Client.GetAuthorizationURL(scopes);
+            string authorizeUrl = Auth2Client.GetAuthorizationURL(scopes);
             return Redirect(authorizeUrl);
         }
         public IActionResult Reload()
@@ -75,7 +67,6 @@ namespace EOTESTMvC.Controllers
 
         public async Task<ActionResult> ApiCallServiceAsync()
         {
-            //Tokens token = Context.Tokens.FirstOrDefault();
             Tokens token = IOMethods.ReadCodeFile();
             if (token?.AccessToken != null )
             {
@@ -90,11 +81,9 @@ namespace EOTESTMvC.Controllers
                 }
                 else if (token.RefreshToken_exp > date)
                 {
-                    var refr = await auth2Client.RefreshTokenAsync(token.RefreshToken);
+                    var refr = await Auth2Client.RefreshTokenAsync(token.RefreshToken);
                     token.AccessToken = refr.AccessToken;
                     token.AccessToken_exp = DateTime.Now.AddSeconds(refr.AccessTokenExpiresIn);
-                    //Context.Tokens.Update(token);
-                    //Context.SaveChanges();
                     IOMethods.WriteTokon(token);
                     accses = token.AccessToken;
                 }
@@ -124,18 +113,7 @@ namespace EOTESTMvC.Controllers
             else
             {
                 return InitiateAuth();
-                //return View("ApiCallService", (object)("QBO API call Failed!"));
-
             }
-
-
-
-
-            ////string output = JsonConvert.SerializeObject(companyInfo, new JsonSerializerSettings
-            ////{
-            ////    NullValueHandling = NullValueHandling.Ignore
-            ////});
-            //return View("ApiCallService", (object)output);
         }
 
 

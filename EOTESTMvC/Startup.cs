@@ -1,16 +1,9 @@
 using EOTESTMvC.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EOTESTMvC
 {
@@ -28,47 +21,27 @@ namespace EOTESTMvC
         {
             services.AddMemoryCache();
             services.AddSession();
-            services.AddControllersWithViews();
-            services.AddDbContext<EoContext>(options =>
-            {
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("EOcontext"));
-            });
-            services.AddIdentity<User1, IdentityRole>(option =>
-            {
-                option.Password.RequiredLength = 6;
-                option.Password.RequireNonAlphanumeric = false;
-                option.Password.RequireDigit = false;
-
-
-            }).AddEntityFrameworkStores<EoContext>().AddDefaultTokenProviders();
+            services.AddControllersWithViews().AddNewtonsoftJson();
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = false;
                 options.ExpireTimeSpan = TimeSpan.FromDays(90);
 
             });
+            services.Configure<IntuitSettings>(Configuration.GetSection("appSettings"));
+            services.AddTransient<IIntuitFunc, IntuitFunc>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseDeveloperExceptionPage();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseSession();
