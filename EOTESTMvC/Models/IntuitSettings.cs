@@ -10,6 +10,6 @@ namespace EOTESTMvC.Models
         public string Clientid { get; set; }
         public string ClientSecret { get; set; }
         public string RedirectUrl { get; set; }
-        public string Environment { get; set; }
+        public string AppEnvironment { get; set; }
     }
 }

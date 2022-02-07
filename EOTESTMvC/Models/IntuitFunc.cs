@@ -16,7 +16,7 @@ namespace EOTESTMvC.Models
             _intitSett.Clientid,
             _intitSett.ClientSecret,
             _intitSett.RedirectUrl,
-            _intitSett.Environment);
+            _intitSett.AppEnvironment);
         }
     }
 }

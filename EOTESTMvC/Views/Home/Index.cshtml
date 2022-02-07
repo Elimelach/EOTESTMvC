@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    bool isAuth =(string) ViewData["isAuth"] == "true" ? true : false;
+    bool isAuth =(string) ViewData["isAuth"] == "True" ? true : false;
     string action = isAuth ? "Load" : "InitiateAuth";
     string massege = isAuth ? "Load Account" : "Authorize Account";
 }

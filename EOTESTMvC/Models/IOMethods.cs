@@ -11,8 +11,7 @@ namespace EOTESTMvC.Models
         private static string GetOrCreataRoute()
         {
             string cur = Directory.GetCurrentDirectory();
-            string root = Directory.GetDirectoryRoot(cur);
-            string path = @$"{root}\EO\SavedAuth\";
+            string path = @$"{cur}\EO\SavedAuth\";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -20,7 +19,8 @@ namespace EOTESTMvC.Models
             string file = "codes.txt";
             if (!File.Exists(path+file))
             {
-                File.Create(path + file);
+              var f=  File.Create(path + file);
+                f.Close();
             }
             return path + file;
         }
@@ -43,6 +43,7 @@ namespace EOTESTMvC.Models
                 };
             }
             streamReader.Close();
+            //stream.Close();
             return tokens;
         }
         public static void WriteTokon(Tokens tokens)
@@ -56,6 +57,7 @@ namespace EOTESTMvC.Models
             writer.Write(tokens.RefreshToken + "|");
             writer.WriteLine(tokens.RefreshToken_exp.ToString());
             writer.Close();
+           // stream.Close();
 
 
         }

@@ -62,7 +62,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    height: 100%;
+    height: 90%;
     background-image: linear-gradient( 45deg, #5986a3, transparent);
 }
 .navbar {
