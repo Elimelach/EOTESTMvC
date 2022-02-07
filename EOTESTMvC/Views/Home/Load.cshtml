@@ -1,4 +1,4 @@
-﻿@model object
+﻿@model Customer
 @{
 
     ViewData["Title"] = "load";
@@ -6,7 +6,7 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome To Your Account</h1>
+    <h1 class="display-4">Welcome</h1>
 </div>
 
 <div class="row">
@@ -16,5 +16,20 @@
     </div>
 </div>
 <div class="row text-center">
-    <p>@data</p>
+    <div class="col-sm-6 offset-sm-3">
+        <p>Company Name: @Model.CompanyName</p>
+        <p>Family Name: @Model.FamilyName</p>
+        <p>
+            Address: @Model.BillAddr.Line1 @Model.BillAddr.City, @Model.BillAddr.CountrySubDivisionCode, @Model.BillAddr.PostalCode
+
+        </p>
+        <p>Phone: @Model.PrimaryPhone.FreeFormNumber</p>
+        <p>Email: @Model.PrimaryEmailAddr.Address</p>
+
+        <p>Acct Balance: @Model.Balance</p>
+        <p>Credit Limit: @Model.CreditLimit</p>
+        <p>Preferred Delivery Method: @Model.PreferredDeliveryMethod</p>
+
+
+    </div>
 </div>

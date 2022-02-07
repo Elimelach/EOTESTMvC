@@ -38,16 +38,17 @@ namespace EOTESTMvC.Controllers
         }
         public async Task<IActionResult> Load()
         {
-            var data = HttpContext.Session.GetObject<CompanyInfo>("data");
+            var data = HttpContext.Session.GetObject<Customer>("data");
             if (data == null)
             {
                 return await ApiCallServiceAsync();
             }
-            string output = JsonConvert.SerializeObject(data, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-            return View((object)output);
+            //string output = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+            //{
+            //    NullValueHandling = NullValueHandling.Ignore
+            //});
+            Console.WriteLine(data);
+            return View(data);
         }
         public ActionResult InitiateAuth()
         {
@@ -100,9 +101,9 @@ namespace EOTESTMvC.Controllers
                     serviceContext.IppConfiguration.MinorVersion.Qbo = "23";
                     serviceContext.IppConfiguration.BaseUrl.Qbo = "https://sandbox-quickbooks.api.intuit.com/";
                     // Create a QuickBooks QueryService using ServiceContext
-                    QueryService<CompanyInfo> querySvc = new QueryService<CompanyInfo>(serviceContext);
-                    CompanyInfo companyInfo = querySvc.ExecuteIdsQuery("SELECT * FROM CompanyInfo").FirstOrDefault();
-                    HttpContext.Session.SetObject("data", companyInfo);
+                    QueryService<Customer> querySvc = new QueryService<Customer>(serviceContext);
+                    Customer customer = querySvc.ExecuteIdsQuery("SELECT * FROM Customer").FirstOrDefault();
+                    HttpContext.Session.SetObject("data", customer);
                     return RedirectToAction("Load");
                 }
                 catch (Exception ex)
